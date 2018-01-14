@@ -99,3 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# cloud9
+.c9/
+ex50/
