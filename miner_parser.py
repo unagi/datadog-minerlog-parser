@@ -6,6 +6,9 @@ from dateutil.parser import parse
 def parse_miner(logger, line):
     syslog_header, message = line.split(']:', 1)
 
+    # pid
+    pid = syslog_header.split('[')[1]
+
     # hash rate
     matches = re.search(r'accepted: .+?\),\s([0-9\.]+)\s(\S)(hash|H)/s\s\((yes|yay)!+\)', message)
     if not matches:
@@ -23,4 +26,4 @@ def parse_miner(logger, line):
     # timestamp
     time_string = " ".join(syslog_header.split(" ", 3)[0:3])
     timestamp = int(parse(time_string).strftime('%s'))
-    return ("miner.hashrate", timestamp, value, {'metric_type': 'gauge', 'unit': 'hash/s'})
+    return ("miner.hashrate", timestamp, value, {'metric_type': 'gauge', 'unit': 'hash/s', 'tags': 'pid:{}'.format(pid)})
